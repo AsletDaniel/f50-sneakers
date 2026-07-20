@@ -1,0 +1,954 @@
+/* ============================================================
+   adidas F50 — FAST FORWARD
+   Brutalism / print-registration language taken from identity.png
+   ============================================================ */
+
+:root {
+  --paper:  #f1eff0;   /* studio white from the photography */
+  --ink:    #0b0b0c;
+  --pink:   #ff5279;   /* F50 solar pink block */
+  --cream:  #ede6d8;   /* outsole cream */
+  --gold:   #c2a15f;   /* hairline accent, use sparingly */
+
+  --mono: "IBM Plex Mono", monospace;
+  --disp: "Michroma", sans-serif;
+
+  --frame: clamp(14px, 2.2vw, 28px);   /* print margin */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  height: 100%;
+  overflow: clip; /* una sola pantalla: la página no scrollea, el scroll cambia de estado */
+}
+
+::selection { background: var(--pink); color: var(--paper); }
+
+/* ============================================================
+   INTRO — pixel grid dissolve
+   ============================================================ */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: transparent;
+}
+
+.intro-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 16), 1fr);
+  grid-template-rows: repeat(var(--rows, 9), 1fr);
+}
+
+.intro-cell {
+  background: var(--ink);
+  transform: scale(1.02); /* evita hairlines entre celdas */
+}
+
+/* la celda muere de golpe: primero flash rosa, luego fuera */
+.intro-cell.out {
+  animation: cell-out .18s steps(2, end) forwards;
+  animation-delay: var(--d, 0ms);
+}
+.intro-cell.out.flash {
+  animation: cell-flash .24s steps(3, end) forwards;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes cell-out {
+  0%   { background: var(--ink);  opacity: 1; }
+  50%  { background: var(--ink);  opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes cell-flash {
+  0%   { background: var(--ink);  opacity: 1; }
+  40%  { background: var(--pink); opacity: 1; }
+  70%  { background: var(--pink); opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.intro-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  place-content: center;
+  gap: 18px;
+  pointer-events: none;
+}
+
+.intro-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--paper);
+  font-size: clamp(9px, 1.1vw, 12px);
+  letter-spacing: .22em;
+  opacity: 0;
+}
+.intro-line.on { opacity: 1; }
+
+.intro-dot {
+  width: 10px; height: 10px;
+  background: var(--pink);
+  animation: blink .5s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.intro-mark {
+  font-family: var(--disp);
+  font-size: clamp(64px, 14vw, 190px);
+  line-height: .9;
+  color: var(--paper);
+  letter-spacing: -.02em;
+  opacity: 0;
+  transform: translateY(10px);
+}
+.intro-mark.on {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  background: var(--pink);
+  color: var(--ink);
+  padding: 0 .18em;
+}
+
+.intro-skip {
+  position: absolute;
+  right: var(--frame);
+  bottom: var(--frame);
+  background: none;
+  border: 1px solid rgba(241, 239, 240, .4);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.intro-skip:hover { background: var(--pink); border-color: var(--pink); color: var(--ink); }
+
+.intro.done { display: none; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero {
+  position: relative;
+  height: 100svh;
+  overflow: clip;
+  background: var(--paper);
+}
+
+.hero-media { position: absolute; inset: 0; }
+
+/* foto en alta calidad que sustituye al frame final del video */
+.hq {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .5s ease;
+  pointer-events: none;
+}
+.hq.show { opacity: 1; }
+
+
+.hero-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero.no-video .hero-media video { display: none; }
+
+/* --- fallback: los sneakers caen del cielo (hasta que llegue hero.mp4) --- */
+.hero-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: url("assets/whitebg.png") center / cover;
+}
+.hero.no-video .hero-fallback { display: block; }
+
+.fallback-pair {
+  position: absolute;
+  right: 4vw;
+  bottom: 10svh;
+  width: min(58vw, 900px);
+  transform: translateY(-140vh) rotate(-10deg);
+  /* difumina los bordes de la foto contra el fondo de estudio */
+  mask-image:
+    linear-gradient(to right, transparent, #000 17%, #000 83%, transparent),
+    linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+  mask-composite: intersect;
+}
+.hero.revealed.no-video .fallback-pair {
+  animation: pair-drop 1s cubic-bezier(.22, .9, .32, 1.18) .25s forwards;
+}
+@keyframes pair-drop {
+  0%   { transform: translateY(-140vh) rotate(-10deg); }
+  70%  { transform: translateY(0) rotate(0deg); }
+  82%  { transform: translateY(-2.5vh) rotate(-.6deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* ============================================================
+   PRINT FRAME — crop marks + registration crosses
+   ============================================================ */
+
+.crop-mark {
+  position: absolute;
+  width: 22px; height: 22px;
+  z-index: 5;
+  pointer-events: none;
+}
+.crop-mark::before, .crop-mark::after {
+  content: "";
+  position: absolute;
+  background: var(--ink);
+}
+.crop-mark::before { width: 100%; height: 1.5px; }
+.crop-mark::after  { width: 1.5px; height: 100%; }
+
+.cm-tl { top: var(--frame); left: var(--frame); }
+.cm-tl::before { top: 0; left: 0; } .cm-tl::after { top: 0; left: 0; }
+.cm-tr { top: var(--frame); right: var(--frame); }
+.cm-tr::before { top: 0; right: 0; } .cm-tr::after { top: 0; right: 0; }
+.cm-bl { bottom: var(--frame); left: var(--frame); }
+.cm-bl::before { bottom: 0; left: 0; } .cm-bl::after { bottom: 0; left: 0; }
+.cm-br { bottom: var(--frame); right: var(--frame); }
+.cm-br::before { bottom: 0; right: 0; } .cm-br::after { bottom: 0; right: 0; }
+
+.reg-cross {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: 400;
+  z-index: 5;
+  pointer-events: none;
+}
+.rc-t { top: 2px; }
+.rc-b { bottom: 2px; }
+
+/* ============================================================
+   HERO UI
+   ============================================================ */
+
+.hero-nav {
+  position: absolute;
+  top: var(--frame);
+  left: calc(var(--frame) + 44px);
+  right: calc(var(--frame) + 44px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 6;
+  font-size: 10px;
+  letter-spacing: .2em;
+}
+
+.nav-left { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.adidas-mark { width: 46px; color: var(--ink); overflow: visible; }
+.nav-word {
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -.04em;
+  line-height: 1;
+}
+
+.nav-center { color: rgba(11,11,12,.55); }
+
+.nav-right { display: flex; align-items: center; gap: 18px; }
+.nav-idx { color: rgba(11,11,12,.55); }
+.nav-cta {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 18px;
+  cursor: pointer;
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 0 100%);
+  filter: drop-shadow(4px 4px 0 var(--pink));
+}
+.nav-cta:hover { background: var(--pink); color: var(--ink); filter: drop-shadow(4px 4px 0 var(--ink)); }
+
+/* barra negra y hairline izquierdas */
+.rail-bar {
+  position: absolute;
+  left: calc(var(--frame) + 4px);
+  top: 13svh;
+  width: 8px;
+  height: 58svh;
+  background: var(--ink);
+  z-index: 7; /* sobre la sangría rosa del wordmark */
+}
+.hair-v {
+  position: absolute;
+  left: calc(var(--frame) + 168px);
+  top: 5svh;
+  width: 1px;
+  height: 64svh;
+  background: rgba(11,11,12,.16);
+  z-index: 6;
+}
+
+/* headline: a media altura, wordmark outline como el banner */
+.hero-head {
+  position: absolute;
+  left: calc(var(--frame) + 44px);
+  top: 17svh;
+  z-index: 6;
+}
+
+/* wordmark real (Title.png trae el bloque rosa horneado) */
+.head-f50 {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+}
+.head-f50 img {
+  display: block;
+  width: clamp(300px, 37vw, 640px);
+  height: auto;
+}
+/* el bloque rosa sangra hasta el borde izquierdo, como el banner */
+.head-f50::before {
+  content: "";
+  position: absolute;
+  right: calc(100% - 6px);
+  top: 3%;
+  height: 83%;
+  width: 100vw;
+  background: var(--pink);
+}
+
+.head-sub {
+  font-family: var(--disp);
+  font-size: clamp(18px, 2.4vw, 36px);
+  letter-spacing: .16em;
+  margin-top: 20px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 32px);
+}
+.sub-line {
+  display: block;
+  width: clamp(70px, 12vw, 230px);
+  height: 1.5px;
+  background: var(--ink);
+}
+
+.head-eng {
+  margin-top: 18px;
+  font-size: 10px;
+  letter-spacing: .5em;
+  color: rgba(11,11,12,.75);
+}
+
+.head-square {
+  display: block;
+  width: 17px;
+  height: 17px;
+  background: var(--ink);
+  margin-top: clamp(24px, 5svh, 54px);
+  margin-left: 118px;
+}
+
+/* tech data */
+.hero-data {
+  position: absolute;
+  right: calc(var(--frame) + 44px);
+  bottom: calc(var(--frame) + 44px);
+  z-index: 6;
+  border-top: 2px solid var(--ink);
+  padding-top: 12px;
+  min-width: 240px;
+}
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  font-size: 10px;
+  letter-spacing: .14em;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(11,11,12,.18);
+}
+.data-row span { color: rgba(11,11,12,.5); }
+.data-row b { font-weight: 600; }
+
+/* scroll cue */
+.hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--frame) + 6px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 9px;
+  letter-spacing: .26em;
+  color: rgba(11,11,12,.6);
+  z-index: 6;
+}
+.scroll-square {
+  width: 9px; height: 9px;
+  background: var(--pink);
+  animation: scroll-tick 1.2s steps(2) infinite;
+}
+@keyframes scroll-tick { 50% { transform: translateY(5px); } }
+
+/* ============================================================
+   STAMP-IN — UI elements pop in with no easing (brutal)
+   ============================================================ */
+
+.stamp { visibility: hidden; }
+.hero.revealed .stamp {
+  visibility: visible;
+  animation: stamp-in .01s steps(1) both;
+}
+.hero.revealed .stamp[data-order="1"] { animation-delay: .05s; }
+.hero.revealed .stamp[data-order="2"] { animation-delay: .13s; }
+.hero.revealed .stamp[data-order="3"] { animation-delay: .21s; }
+.hero.revealed .stamp[data-order="4"] { animation-delay: .29s; }
+.hero.revealed .stamp[data-order="5"] { animation-delay: .37s; }
+.hero.revealed .stamp[data-order="6"] { animation-delay: .47s; }
+.hero.revealed .stamp[data-order="7"] { animation-delay: .57s; }
+.hero.revealed .stamp[data-order="8"] { animation-delay: .67s; }
+
+@keyframes stamp-in {
+  from { visibility: hidden; }
+  to   { visibility: visible; }
+}
+
+/* el bloque rosa del F50 se estampa un frame después del texto */
+.hero.revealed .f50-block { animation: block-hit .12s steps(2) .45s both; }
+@keyframes block-hit {
+  0%   { transform: scale(0, 1); transform-origin: left; }
+  100% { transform: scale(1, 1); transform-origin: left; }
+}
+
+/* ============================================================
+   02 — MATERIAL STUDY: capa dentro del hero (misma pantalla)
+   El scroll cambia de estado: .hero.studying muestra esta capa,
+   el hero UI sale en cascada y los callouts blueprint se dibujan.
+   ============================================================ */
+
+.study-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease;
+  z-index: 5;
+}
+.hero.studying .study-layer { opacity: 1; pointer-events: auto; }
+
+.study-layer video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.study-title {
+  position: absolute;
+  left: calc(var(--frame) + 44px);
+  bottom: calc(var(--frame) + 44px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--disp);
+  font-size: clamp(15px, 2vw, 28px);
+  letter-spacing: .1em;
+  visibility: hidden;
+}
+.hero.studying .study-title { visibility: visible; transition: visibility 0s .25s; }
+.study-chip {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  padding: 5px 9px;
+}
+
+.study-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--frame) + 6px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 9px;
+  letter-spacing: .26em;
+  color: var(--ink);
+  background: rgba(241, 239, 240, .75);
+  padding: 6px 10px;
+  visibility: hidden;
+}
+.hero.studying .study-cue { visibility: visible; transition: visibility 0s .5s; }
+
+/* ---------- decorativos técnicos ---------- */
+
+.decor {
+  position: absolute;
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.decor line { stroke-width: 1; }
+.decor .d-thin { stroke-width: .8; opacity: .7; }
+.decor .d-dot { fill: var(--ink); stroke: none; }
+.decor.on { opacity: .85; }
+
+.decor-arc {
+  left: 3%;
+  top: 11%;
+  width: clamp(120px, 14vw, 210px);
+  height: auto;
+}
+.decor-arc .d-arc {
+  stroke-dasharray: 290;
+  stroke-dashoffset: 290;
+  transition: stroke-dashoffset .5s cubic-bezier(.3, .7, .2, 1) .05s;
+}
+.decor.on .d-arc { stroke-dashoffset: 0; }
+
+.decor-circle {
+  left: 44%;
+  top: 36%;
+  width: clamp(90px, 9.5vw, 150px);
+  height: auto;
+  opacity: 0;
+}
+.decor-circle.on { opacity: .55; }
+
+/* ---------- callouts: línea con flecha + etiqueta, como el banner ---------- */
+
+.bp { position: absolute; }
+
+/* derecha: la línea corre desde la punta (--tip) hasta la etiqueta */
+.bp-1, .bp-2 {
+  top: var(--y);
+  left: var(--tip);
+  right: calc(var(--frame) + 44px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bp-line {
+  flex: 1;
+  height: 1.2px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .3s cubic-bezier(.25, .8, .25, 1) .08s;
+}
+.bp.on .bp-line { transform: scaleX(1); }
+
+.bp-arrow {
+  width: 0;
+  height: 0;
+  flex: none;
+  opacity: 0;
+  transition: opacity .12s ease .34s;
+}
+.bp.on .bp-arrow { opacity: 1; }
+.bp-arrow.left {
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-right: 8px solid var(--ink);
+  margin-right: -12px; /* pegada a la línea */
+}
+
+.bp-label {
+  white-space: nowrap;
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity .22s ease, transform .22s cubic-bezier(.25, .8, .25, 1);
+}
+.bp.on .bp-label { opacity: 1; transform: none; }
+
+/* outsole: etiqueta subrayada abajo-izquierda + diagonal con flecha */
+.bp-3 {
+  left: calc(var(--frame) + 44px);
+  top: 82%;
+}
+.bp-3 .bp-label {
+  transform: translateX(-8px);
+  border-bottom: 1.2px solid var(--ink);
+  padding-bottom: 8px;
+  padding-right: 26px;
+}
+.bp-3 .bp-diag {
+  position: absolute;
+  left: calc(100% - 4px);
+  top: 100%;
+  width: clamp(46px, 5vw, 84px);
+  height: 1.2px;
+  background: var(--ink);
+  transform-origin: left center;
+  transform: rotate(-38deg) scaleX(0);
+  transition: transform .28s cubic-bezier(.25, .8, .25, 1) .12s;
+}
+.bp-3.on .bp-diag { transform: rotate(-38deg) scaleX(1); }
+.bp-3 .bp-arrow.tip {
+  position: absolute;
+  right: -7px;
+  top: -3.5px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 8px solid var(--ink);
+}
+
+/* ============================================================
+   03 — PRODUCT: el zapato lejano flotando
+   ============================================================ */
+
+.detail-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease;
+  z-index: 6;
+}
+.hero.detailing .detail-layer { opacity: 1; pointer-events: auto; }
+
+/* en 03 el título F50 ocupa la esquina del logo: el logo se retira */
+.hero.settled.detailing .nav-left { visibility: hidden; }
+
+.detail-layer video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* título con la tipografía real (Title.png trae el bloque rosa) */
+.detail-head {
+  position: absolute;
+  left: calc(var(--frame) + 30px);
+  top: calc(var(--frame) + 24px);
+  visibility: hidden;
+  z-index: 3;
+}
+.hero.detailing .detail-head { visibility: visible; transition: visibility 0s .25s; }
+.detail-head img {
+  display: block;
+  width: clamp(220px, 24vw, 380px);
+  height: auto;
+}
+.detail-head-sub {
+  margin-top: 12px;
+  padding-left: 4px;
+  font-size: clamp(13px, 1.4vw, 19px);
+  font-weight: 600;
+  letter-spacing: .42em;
+}
+
+/* geometría blueprint alrededor de la bota — se DIBUJA (dashoffset) */
+.d-blueprint {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgba(11, 11, 12, .34);
+  stroke-width: 1;
+}
+.d-blueprint circle,
+.d-blueprint line {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset .5s cubic-bezier(.3, .7, .2, 1);
+}
+.detail-layer.done .d-blueprint circle,
+.detail-layer.done .d-blueprint line { stroke-dashoffset: 0; }
+.detail-layer.done .d-blueprint :nth-child(2n) { transition-delay: .12s; }
+.detail-layer.done .d-blueprint :nth-child(3n) { transition-delay: .24s; }
+.detail-layer.done .d-blueprint :nth-child(5n) { transition-delay: .36s; }
+
+/* barrido de escaneo: una pasada rosa de arriba a abajo al asentarse */
+.d-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--pink);
+  opacity: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.detail-layer.done .d-scan { animation: scan .65s cubic-bezier(.3, .7, .3, 1) both; }
+@keyframes scan {
+  0%   { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(calc(100svh - 4px)); }
+}
+
+/* glitch del título cuando aterrizan los detalles */
+.detail-layer.done .detail-head img { animation: glitch .28s steps(2, end) .05s; }
+@keyframes glitch {
+  0%   { transform: translate(-5px, 3px); }
+  33%  { transform: translate(4px, -2px); }
+  66%  { transform: translate(-2px, 1px); }
+  100% { transform: none; }
+}
+
+/* callouts agresivos */
+.dp {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .25s ease, transform .25s cubic-bezier(.25, .8, .25, 1);
+  z-index: 3;
+}
+.detail-layer.done .dp-1 { opacity: 1; transform: none; transition-delay: .05s; }
+.detail-layer.done .dp-2 { opacity: 1; transform: none; transition-delay: .17s; }
+.detail-layer.done .dp-3 { opacity: 1; transform: none; transition-delay: .29s; }
+
+.dp-square {
+  position: absolute;
+  top: -17px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  background: var(--ink);
+}
+.dp-label {
+  position: relative;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  white-space: nowrap;
+  padding: 0 14px 9px 0;
+  border-bottom: 1.5px solid var(--ink);
+}
+.dp-tick {
+  position: absolute;
+  right: -3px;
+  bottom: -9px;
+  width: 5px;
+  height: 18px;
+  background: var(--pink);
+  animation: tick-pulse 1.6s ease-in-out infinite;
+}
+@keyframes tick-pulse { 50% { opacity: .3; } }
+.dp-elbow {
+  position: absolute;
+  right: calc(100% + 2px);
+  top: 100%;
+  width: clamp(44px, 5vw, 78px);
+  height: 1.5px;
+  background: var(--ink);
+  transform-origin: right center;
+  transform: rotate(35deg);
+}
+/* variante izquierda (outsole): codo hacia arriba-derecha con flecha */
+.dp.flip .dp-elbow {
+  right: auto;
+  left: calc(100% + 2px);
+  transform-origin: left center;
+  transform: rotate(-35deg);
+}
+.dp-elbow.arrow::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: -3.5px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 8px solid var(--ink);
+}
+
+/* mobiliario de imprenta */
+.d-cross {
+  position: absolute;
+  font-size: 20px;
+  color: var(--ink);
+  opacity: .9;
+  z-index: 3;
+}
+.d-sq {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background: var(--ink);
+  z-index: 3;
+  animation: blink 2.4s steps(1) infinite;
+}
+.d-sq:nth-of-type(6) { animation-delay: .8s; }
+.d-sq:nth-of-type(7) { animation-delay: 1.6s; }
+
+/* botón grande inferior: esquinas cortadas + doble capa rosa */
+.detail-cta-big {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--frame) + 30px);
+  transform: translateX(-50%) translateY(10px);
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .24em;
+  padding: 19px 38px;
+  cursor: pointer;
+  clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
+  filter: drop-shadow(7px 7px 0 var(--pink));
+  opacity: 0;
+  transition: opacity .25s ease .4s, transform .25s cubic-bezier(.25, .8, .25, 1) .4s,
+              filter .15s ease;
+  z-index: 3;
+}
+.detail-cta-big::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: var(--pink);
+  margin-right: 16px;
+  vertical-align: 1px;
+  animation: blink 1.1s steps(1) infinite;
+}
+.detail-layer.done .detail-cta-big { opacity: 1; transform: translateX(-50%); }
+.detail-cta-big:hover {
+  background: var(--pink);
+  color: var(--ink);
+  filter: drop-shadow(3px 3px 0 var(--ink));
+}
+.detail-cta-big:hover::before { background: var(--ink); }
+
+.detail-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--frame) + 6px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 9px;
+  letter-spacing: .26em;
+  color: var(--ink);
+  background: rgba(241, 239, 240, .75);
+  padding: 6px 10px;
+  visibility: hidden;
+}
+.hero.detailing .detail-cue { visibility: visible; transition: visibility 0s .5s; }
+
+/* ============================================================
+   CAMBIO DE ESTADO — el hero UI sale/entra en cascada
+   (.settled se añade por JS al terminar el reveal inicial)
+   ============================================================ */
+
+.hero.settled .stamp {
+  animation: none;
+  visibility: visible;
+  transition: visibility 0s;
+}
+.hero.settled.studying .stamp:not(.keep) { visibility: hidden; }
+
+/* salida: cascada rápida de abajo hacia arriba */
+.hero.settled.studying .stamp[data-order="8"] { transition-delay: 0s; }
+.hero.settled.studying .stamp[data-order="7"] { transition-delay: .03s; }
+.hero.settled.studying .stamp[data-order="6"] { transition-delay: .06s; }
+.hero.settled.studying .stamp[data-order="5"] { transition-delay: .09s; }
+.hero.settled.studying .stamp[data-order="4"] { transition-delay: .12s; }
+.hero.settled.studying .stamp[data-order="3"] { transition-delay: .15s; }
+
+/* regreso: cascada rápida de arriba hacia abajo */
+.hero.settled .stamp[data-order="3"] { transition-delay: .03s; }
+.hero.settled .stamp[data-order="4"] { transition-delay: .07s; }
+.hero.settled .stamp[data-order="5"] { transition-delay: .11s; }
+.hero.settled .stamp[data-order="6"] { transition-delay: .15s; }
+.hero.settled .stamp[data-order="7"] { transition-delay: .19s; }
+.hero.settled .stamp[data-order="8"] { transition-delay: .23s; }
+
+/* el botón del nav muta con un flash */
+.nav-cta.swap { background: var(--pink); color: var(--pink); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 820px) {
+  .nav-center, .nav-idx { display: none; }
+  .hero-nav { left: var(--frame); right: var(--frame); }
+  .rail-bar, .hair-v { display: none; }
+  .hero-head { left: var(--frame); top: 13svh; }
+  .head-f50 { font-size: clamp(76px, 24vw, 110px); }
+  .head-square { margin-left: 64px; margin-top: 18px; }
+  /* en móvil los callouts blueprint se vuelven chips fijos */
+  .bp-line, .bp-arrow, .bp-diag, .decor { display: none; }
+  .bp-1, .bp-2 { display: block; }
+  .bp .bp-label {
+    display: inline-block;
+    background: rgba(241, 239, 240, .88);
+    padding: 8px 10px;
+  }
+  .bp-3 .bp-label { border-bottom: 1.2px solid var(--ink); padding-right: 10px; }
+  .bp-1 { left: auto; right: var(--frame); top: 20svh; }
+  .bp-2 { left: var(--frame); right: auto; top: 46svh; }
+  .bp-3 { left: auto; right: var(--frame); top: auto; bottom: 30svh; }
+  .study-title { left: var(--frame); }
+  .hero.studying .nav-left { background: rgba(241, 239, 240, .82); padding: 8px 10px; }
+  .detail-head { left: var(--frame); top: calc(var(--frame) + 58px); }
+  .detail-head img { width: min(48vw, 185px); }
+  .detail-head-sub { font-size: 11px; letter-spacing: .3em; }
+  /* en móvil los callouts del 03 se vuelven chips sin codos ni blueprint */
+  .d-blueprint, .dp-elbow, .d-sq { display: none; }
+  .dp .dp-label { background: rgba(241, 239, 240, .88); padding: 8px 24px 8px 10px; }
+  .dp-square { top: -14px; }
+  .dp-1 { left: auto; right: var(--frame); top: 24svh; }
+  .dp-2 { left: var(--frame); top: 46svh; }
+  .dp-3 { left: auto; right: var(--frame); top: 62svh; }
+  .detail-cta-big { width: calc(100% - 2 * var(--frame)); bottom: calc(var(--frame) + 34px); }
+  .hero-data {
+    right: var(--frame);
+    left: var(--frame);
+    bottom: calc(var(--frame) + 26px);
+    min-width: 0;
+  }
+  .hero-scroll { display: none; }
+  .fallback-pair { right: 0; width: 92vw; bottom: 34svh; }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .intro { display: none; }
+  .stamp, .hero .stamp { visibility: visible; animation: none !important; }
+  .fallback-pair { transform: none; animation: none !important; }
+  .hero.revealed .f50-block { animation: none; }
+  .scroll-square { animation: none; }
+  .study-layer, .detail-layer, .bp-line, .bp-arrow, .bp-diag, .bp-label, .decor, .decor .d-arc,
+  .dp, .d-blueprint circle, .d-blueprint line, .detail-cta-big { transition: none !important; }
+  .dp-tick, .d-sq, .d-scan, .detail-cta-big::before,
+  .detail-layer.done .detail-head img { animation: none !important; }
+}

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>adidas F50 — FAST FORWARD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============ INTRO GRID ============ -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-grid" id="introGrid"></div>
+    <div class="intro-center">
+      <div class="intro-line" id="introLine">
+        <span class="intro-dot"></span>
+        <span class="intro-text">ADIDAS FOOTBALL&nbsp;&nbsp;//&nbsp;&nbsp;PRODUCT: F50</span>
+      </div>
+      <div class="intro-mark" id="introMark">F50</div>
+    </div>
+    <button class="intro-skip" id="introSkip">SKIP&nbsp;→</button>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="hero">
+
+    <!-- media -->
+    <div class="hero-media">
+      <video id="heroVideo" muted playsinline preload="auto" poster="assets/whitebg.png">
+        <source src="assets/hero.mp4" type="video/mp4">
+      </video>
+      <!-- fallback: sneakers drop from the sky (until hero.mp4 lands) -->
+      <div class="hero-fallback" id="heroFallback">
+        <img class="fallback-pair" id="fallbackPair" src="assets/pair.png" alt="adidas F50 turf boots">
+      </div>
+      <!-- al terminar el video, el frame final se sustituye por la foto en alta calidad -->
+      <img class="hq" id="hqHero" src="assets/pair.png" alt="">
+    </div>
+
+    <!-- capa MATERIAL STUDY: mismo viewport, se activa con el scroll -->
+    <div class="study-layer" id="studyLayer">
+      <video id="studyVideo" muted playsinline preload="auto"></video>
+      <!-- macro en alta calidad al terminar la animación -->
+      <img class="hq" id="hqStudy" src="assets/macro-clean.png" alt="">
+
+      <!-- decorativos técnicos (arco + crosshair arriba-izq, círculo al centro) -->
+      <svg class="decor decor-arc" viewBox="0 0 200 200">
+        <path class="d-arc" d="M 150 22 A 128 128 0 0 0 24 140" fill="none"/>
+        <path class="d-arrow" d="M 24 140 l 10 -12 M 24 140 l 14 3" fill="none"/>
+        <circle class="d-circ" cx="150" cy="150" r="28" fill="none"/>
+        <line x1="150" y1="108" x2="150" y2="128"/>
+        <line x1="150" y1="172" x2="150" y2="192"/>
+        <line x1="108" y1="150" x2="128" y2="150"/>
+        <line x1="172" y1="150" x2="192" y2="150"/>
+        <circle cx="150" cy="150" r="2.2" class="d-dot"/>
+        <line x1="118" y1="150" x2="182" y2="150" class="d-thin"/>
+      </svg>
+      <svg class="decor decor-circle" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="52" fill="none"/>
+        <line x1="70" y1="4"   x2="70" y2="26"/>
+        <line x1="70" y1="114" x2="70" y2="136"/>
+        <line x1="4"  y1="70"  x2="26" y2="70"/>
+        <line x1="114" y1="70" x2="136" y2="70"/>
+      </svg>
+
+      <!-- callouts: etiqueta a la derecha, línea con flecha apuntando al zapato -->
+      <div class="bp bp-1" style="--y: 13%; --tip: 62%">
+        <span class="bp-arrow left"></span>
+        <div class="bp-line"></div>
+        <div class="bp-label">SYNTHETIC&nbsp;MICRO-TEXTURE</div>
+      </div>
+      <div class="bp bp-2" style="--y: 41%; --tip: 73%">
+        <span class="bp-arrow left"></span>
+        <div class="bp-line"></div>
+        <div class="bp-label">THREE-STRIPE&nbsp;STRUCTURE</div>
+      </div>
+      <!-- outsole: etiqueta subrayada a la izquierda + diagonal con flecha -->
+      <div class="bp bp-3">
+        <div class="bp-label">RUBBER&nbsp;TURF&nbsp;OUTSOLE</div>
+        <div class="bp-diag"><span class="bp-arrow tip"></span></div>
+      </div>
+
+      <div class="study-title">
+        <span class="study-chip">02</span>
+        <span>MATERIAL&nbsp;STUDY</span>
+      </div>
+      <div class="study-cue">
+        <span class="scroll-square"></span>
+        <span>SCROLL&nbsp;—&nbsp;PRODUCT&nbsp;&nbsp;/&nbsp;&nbsp;UP&nbsp;—&nbsp;BACK</span>
+      </div>
+    </div>
+
+    <!-- capa 03 MATERIAL STUDY completo: bota lejana + todos los detalles -->
+    <div class="detail-layer" id="detailLayer">
+      <video id="detailVideo" muted playsinline preload="auto"></video>
+      <img class="hq" id="hqDetail" src="assets/float.png" alt="">
+
+      <!-- geometría blueprint alrededor de la bota (mismo encuadre 16:9 que el video) -->
+      <svg class="d-blueprint" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <circle pathLength="100" cx="700"  cy="300" r="130"/>
+        <circle pathLength="100" cx="700"  cy="300" r="6"/>
+        <circle pathLength="100" cx="850"  cy="520" r="90"/>
+        <circle pathLength="100" cx="1140" cy="640" r="70"/>
+        <circle pathLength="100" cx="640"  cy="770" r="45"/>
+        <circle pathLength="100" cx="1010" cy="330" r="55"/>
+        <line pathLength="100" x1="700"  y1="150" x2="700"  y2="450"/>
+        <line pathLength="100" x1="550"  y1="300" x2="850"  y2="300"/>
+        <line pathLength="100" x1="380"  y1="880" x2="900"  y2="360"/>
+        <line pathLength="100" x1="1010" y1="250" x2="1010" y2="410"/>
+        <line pathLength="100" x1="1350" y1="180" x2="1080" y2="470"/>
+      </svg>
+
+      <!-- barrido de escaneo al asentarse -->
+      <div class="d-scan"></div>
+
+      <!-- título con la tipografía real -->
+      <div class="detail-head">
+        <img src="assets/title.png" alt="F50">
+        <div class="detail-head-sub">MATERIAL&nbsp;STUDY</div>
+      </div>
+
+      <!-- callouts agresivos: cuadro + etiqueta subrayada + tick rosa + codo -->
+      <div class="dp dp-1" style="--x: 63%; --y: 22%">
+        <span class="dp-square"></span>
+        <div class="dp-label">SYNTHETIC&nbsp;MICRO-TEXTURE<span class="dp-tick"></span></div>
+        <div class="dp-elbow"></div>
+      </div>
+      <div class="dp dp-2" style="--x: 69%; --y: 46%">
+        <span class="dp-square"></span>
+        <div class="dp-label">THREE-STRIPE&nbsp;STRUCTURE<span class="dp-tick"></span></div>
+        <div class="dp-elbow"></div>
+      </div>
+      <div class="dp dp-3 flip" style="--x: 15%; --y: 68%">
+        <span class="dp-square"></span>
+        <div class="dp-label">RUBBER&nbsp;TURF&nbsp;OUTSOLE<span class="dp-tick"></span></div>
+        <div class="dp-elbow arrow"></div>
+      </div>
+
+      <!-- mobiliario de imprenta en los bordes -->
+      <span class="d-cross" style="left: 2%;  top: 4%">+</span>
+      <span class="d-cross" style="right: 2%; top: 4%">+</span>
+      <span class="d-cross" style="left: 2%;  bottom: 5%">+</span>
+      <span class="d-cross" style="right: 2%; bottom: 5%">+</span>
+      <span class="d-sq" style="left: 4%;  top: 50%"></span>
+      <span class="d-sq" style="right: 4%; top: 33%"></span>
+      <span class="d-sq" style="right: 15%; bottom: 12%"></span>
+
+      <button class="detail-cta-big">VIEW&nbsp;PRODUCT&nbsp;DETAILS&nbsp;&nbsp;→</button>
+
+      <div class="detail-cue">
+        <span class="scroll-square"></span>
+        <span>SCROLL&nbsp;UP&nbsp;—&nbsp;BACK</span>
+      </div>
+    </div>
+
+    <!-- print-style frame -->
+    <div class="crop-mark cm-tl"></div>
+    <div class="crop-mark cm-tr"></div>
+    <div class="crop-mark cm-bl"></div>
+    <div class="crop-mark cm-br"></div>
+    <div class="reg-cross rc-t stamp" data-order="8">+</div>
+    <div class="reg-cross rc-b stamp" data-order="8">+</div>
+
+    <!-- top bar -->
+    <nav class="hero-nav">
+      <div class="nav-left stamp keep" data-order="1">
+        <svg class="adidas-mark" viewBox="0 0 40 24" aria-label="adidas">
+          <g fill="currentColor" transform="translate(9 0) skewX(-20)">
+            <rect x="0"    y="14" width="7" height="10"/>
+            <rect x="10.5" y="7"  width="7" height="17"/>
+            <rect x="21"   y="0"  width="7" height="24"/>
+          </g>
+        </svg>
+        <span class="nav-word">adidas</span>
+      </div>
+      <div class="nav-center stamp" data-order="2">FOOTWEAR&nbsp;/&nbsp;FOOTBALL&nbsp;/&nbsp;TURF</div>
+      <div class="nav-right stamp keep" data-order="2">
+        <span class="nav-idx">REL.26—07</span>
+        <span class="nav-cta" id="navCta">BUY&nbsp;F50</span>
+      </div>
+    </nav>
+
+    <!-- barra y hairline izquierdas -->
+    <div class="rail-bar stamp" data-order="3"></div>
+    <div class="hair-v stamp" data-order="3"></div>
+
+    <!-- headline block: a media altura, wordmark outline como el banner -->
+    <div class="hero-head">
+      <h1 class="head-f50 stamp" data-order="4">
+        <img src="assets/title.png" alt="F50">
+      </h1>
+      <div class="head-sub stamp" data-order="5">FAST&nbsp;FORWARD<span class="sub-line"></span></div>
+      <div class="head-eng stamp" data-order="6">ENGINEERED&nbsp;FOR&nbsp;SPEED</div>
+      <span class="head-square stamp" data-order="6"></span>
+    </div>
+
+    <!-- tech data -->
+    <div class="hero-data stamp" data-order="7">
+      <div class="data-row"><span>UPPER</span><b>FIBERTOUCH™</b></div>
+      <div class="data-row"><span>OUTSOLE</span><b>RUBBER&nbsp;TURF</b></div>
+      <div class="data-row"><span>WEIGHT</span><b>198&nbsp;G&nbsp;/&nbsp;UK&nbsp;8</b></div>
+      <div class="data-row"><span>COLOR</span><b>SOLAR&nbsp;PINK</b></div>
+    </div>
+
+    <!-- scroll cue -->
+    <div class="hero-scroll stamp" data-order="8">
+      <span class="scroll-square"></span>
+      <span>SCROLL&nbsp;—&nbsp;MATERIAL&nbsp;STUDY</span>
+    </div>
+  </header>
+
+
+  <script src="app.js"></script>
+</body>
+</html>
