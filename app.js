@@ -205,6 +205,8 @@
 
   // nada de arrastrar imágenes (Firefox ignora -webkit-user-drag)
   document.querySelectorAll("img").forEach(i => { i.draggable = false; });
+  // sin menú contextual: bloquea "guardar/copiar imagen" con clic derecho
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
 
   // los callouts se dibujan en ráfaga cuando el video está por asentarse
   let fired = false;

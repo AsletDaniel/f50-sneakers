@@ -32,6 +32,8 @@ img, svg, video {
   user-select: none;
   -webkit-touch-callout: none;
 }
+/* las imágenes no reciben clics: ni clic derecho ni long-press las alcanza */
+img { pointer-events: none; }
 
 ::selection { background: var(--pink); color: var(--paper); }
 
