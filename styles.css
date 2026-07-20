@@ -266,17 +266,11 @@ img, svg, video {
   letter-spacing: .2em;
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  /* backdrop propio para que el multiply del logo JPG funda su blanco aquí */
-  background: var(--paper);
-}
+.nav-left { display: flex; align-items: center; }
 .adidas-mark {
   width: clamp(58px, 5vw, 84px);
   height: auto;
-  display: block;
-  mix-blend-mode: multiply; /* el JPG trae fondo blanco: multiply lo funde con el papel */
+  display: block; /* PNG con alfa real: sin fondo, sin trucos de blend */
 }
 
 .nav-center { color: rgba(11,11,12,.55); }
