@@ -921,7 +921,6 @@ img, svg, video {
   .bp-2 { left: var(--frame); right: auto; top: 46svh; }
   .bp-3 { left: auto; right: var(--frame); top: auto; bottom: 30svh; }
   .study-title { left: var(--frame); }
-  .hero.studying .nav-left { background: rgba(241, 239, 240, .82); padding: 8px 10px; }
   .detail-head { left: var(--frame); top: calc(var(--frame) + 58px); }
   .detail-head img { width: min(48vw, 185px); }
   .detail-head-sub { font-size: 11px; letter-spacing: .3em; }
