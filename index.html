@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="adidas F50 — FAST FORWARD. Engineered for speed.">
+  <meta name="theme-color" content="#0b0b0c">
   <title>adidas F50 — FAST FORWARD</title>
+  <link rel="preload" as="image" href="assets/title.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -29,22 +32,22 @@
 
     <!-- media -->
     <div class="hero-media">
-      <video id="heroVideo" muted playsinline preload="auto" poster="assets/whitebg.png">
+      <video id="heroVideo" muted playsinline preload="auto" poster="assets/whitebg.jpg">
         <source src="assets/hero.mp4" type="video/mp4">
       </video>
       <!-- fallback: sneakers drop from the sky (until hero.mp4 lands) -->
       <div class="hero-fallback" id="heroFallback">
-        <img class="fallback-pair" id="fallbackPair" src="assets/pair.png" alt="adidas F50 turf boots">
+        <img class="fallback-pair" id="fallbackPair" src="assets/pair.jpg" alt="adidas F50 turf boots">
       </div>
       <!-- al terminar el video, el frame final se sustituye por la foto en alta calidad -->
-      <img class="hq" id="hqHero" src="assets/pair.png" alt="">
+      <img class="hq" id="hqHero" src="assets/pair.jpg" alt="">
     </div>
 
     <!-- capa MATERIAL STUDY: mismo viewport, se activa con el scroll -->
     <div class="study-layer" id="studyLayer">
       <video id="studyVideo" muted playsinline preload="auto"></video>
       <!-- macro en alta calidad al terminar la animación -->
-      <img class="hq" id="hqStudy" src="assets/macro-clean.png" alt="">
+      <img class="hq" id="hqStudy" src="assets/macro-clean.jpg" alt="">
 
       <!-- decorativos técnicos (arco + crosshair arriba-izq, círculo al centro) -->
       <svg class="decor decor-arc" viewBox="0 0 200 200">
@@ -96,7 +99,7 @@
     <!-- capa 03 MATERIAL STUDY completo: bota lejana + todos los detalles -->
     <div class="detail-layer" id="detailLayer">
       <video id="detailVideo" muted playsinline preload="auto"></video>
-      <img class="hq" id="hqDetail" src="assets/float.png" alt="">
+      <img class="hq" id="hqDetail" src="assets/float.jpg" alt="">
 
       <!-- geometría blueprint alrededor de la bota (mismo encuadre 16:9 que el video) -->
       <svg class="d-blueprint" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
@@ -167,13 +170,7 @@
     <!-- top bar -->
     <nav class="hero-nav">
       <div class="nav-left stamp keep" data-order="1">
-        <svg class="adidas-mark" viewBox="0 0 40 24" aria-label="adidas">
-          <g fill="currentColor" transform="translate(9 0) skewX(-20)">
-            <rect x="0"    y="14" width="7" height="10"/>
-            <rect x="10.5" y="7"  width="7" height="17"/>
-            <rect x="21"   y="0"  width="7" height="24"/>
-          </g>
-        </svg>
+        <img class="adidas-mark" src="assets/adidas.jpg" alt="adidas" draggable="false">
         <span class="nav-word">adidas</span>
       </div>
       <div class="nav-center stamp" data-order="2">FOOTWEAR&nbsp;/&nbsp;FOOTBALL&nbsp;/&nbsp;TURF</div>

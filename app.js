@@ -73,6 +73,8 @@
     intro.classList.add("done");
     hero.classList.add("revealed");
     startMedia();
+    // avisa a la capa de estados que ya puede descargar sus videos
+    window.dispatchEvent(new Event("f50:revealed"));
     // tras la cascada inicial, el UI pasa a modo transición (cambio de estado)
     setTimeout(() => hero.classList.add("settled"), 1200);
   };
@@ -180,18 +182,29 @@
   };
   const END = (v) => v.duration - 0.001;
 
-  // blob: python http.server no soporta Range requests → sin blob el mp4
-  // no es seekable y no podríamos reiniciarlo (currentTime = 0) al re-entrar
+  // blob: sin Range requests el mp4 no es seekable y no podríamos
+  // reiniciarlo ni correrlo en reversa. Las descargas se difieren hasta
+  // que el hero terminó de cargar para no competir con su video.
   let ready = false;
   let dReady = false;
-  fetch("assets/scroll.mp4")
-    .then(r => { if (!r.ok) throw 0; return r.blob(); })
-    .then(b => { video.src = URL.createObjectURL(b); ready = true; })
-    .catch(() => {});
-  fetch("assets/detail.mp4")
-    .then(r => { if (!r.ok) throw 0; return r.blob(); })
-    .then(b => { dVideo.src = URL.createObjectURL(b); dReady = true; })
-    .catch(() => {});
+  let fetched = false;
+  const fetchStateVideos = () => {
+    if (fetched) return;
+    fetched = true;
+    fetch("assets/scroll.mp4")
+      .then(r => { if (!r.ok) throw 0; return r.blob(); })
+      .then(b => { video.src = URL.createObjectURL(b); ready = true; })
+      .catch(() => {});
+    fetch("assets/detail.mp4")
+      .then(r => { if (!r.ok) throw 0; return r.blob(); })
+      .then(b => { dVideo.src = URL.createObjectURL(b); dReady = true; })
+      .catch(() => {});
+  };
+  window.addEventListener("f50:revealed", fetchStateVideos, { once: true });
+  setTimeout(fetchStateVideos, 4000); // red de seguridad
+
+  // nada de arrastrar imágenes (Firefox ignora -webkit-user-drag)
+  document.querySelectorAll("img").forEach(i => { i.draggable = false; });
 
   // los callouts se dibujan en ráfaga cuando el video está por asentarse
   let fired = false;

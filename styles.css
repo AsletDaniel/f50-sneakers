@@ -6,7 +6,7 @@
 :root {
   --paper:  #f1eff0;   /* studio white from the photography */
   --ink:    #0b0b0c;
-  --pink:   #ff5279;   /* F50 solar pink block */
+  --pink:   #fd3572;   /* F50 solar pink — tono exacto del wordmark (title.png) */
   --cream:  #ede6d8;   /* outsole cream */
   --gold:   #c2a15f;   /* hairline accent, use sparingly */
 
@@ -24,6 +24,13 @@ html, body {
   font-family: var(--mono);
   height: 100%;
   overflow: clip; /* una sola pantalla: la página no scrollea, el scroll cambia de estado */
+  user-select: none; /* nada se selecciona ni se arrastra */
+}
+
+img, svg, video {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 ::selection { background: var(--pink); color: var(--paper); }
@@ -177,7 +184,7 @@ html, body {
   position: absolute;
   inset: 0;
   display: none;
-  background: url("assets/whitebg.png") center / cover;
+  background: url("assets/whitebg.jpg") center / cover;
 }
 .hero.no-video .hero-fallback { display: block; }
 
@@ -259,8 +266,20 @@ html, body {
   letter-spacing: .2em;
 }
 
-.nav-left { display: flex; flex-direction: column; align-items: center; gap: 7px; }
-.adidas-mark { width: 46px; color: var(--ink); overflow: visible; }
+.nav-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  /* backdrop propio para que el multiply del logo JPG funda su blanco aquí */
+  background: var(--paper);
+}
+.adidas-mark {
+  width: 62px;
+  height: auto;
+  display: block;
+  mix-blend-mode: multiply; /* el JPG trae fondo blanco: multiply lo funde con el papel */
+}
 .nav-word {
   font-weight: 600;
   font-size: 17px;
@@ -322,15 +341,16 @@ html, body {
   width: clamp(300px, 37vw, 640px);
   height: auto;
 }
-/* el bloque rosa sangra hasta el borde izquierdo, como el banner */
+/* el bloque rosa sangra hasta el borde izquierdo, como el banner;
+   gradiente muestreado del borde izquierdo del PNG para que no haya seam */
 .head-f50::before {
   content: "";
   position: absolute;
-  right: calc(100% - 6px);
-  top: 3%;
-  height: 83%;
+  right: 98.8%; /* empata con el borde izquierdo del bloque del PNG (1.03%) */
+  top: 2.3%;
+  height: 89.5%;
   width: 100vw;
-  background: var(--pink);
+  background: linear-gradient(180deg, #fc296e, #fd3172);
 }
 
 .head-sub {

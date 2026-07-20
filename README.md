@@ -84,6 +84,19 @@ foto en alta calidad (elemento `.hq`, mismo `object-fit: cover` y mismo aspecto
 - `float.png` (4notext.png, bota flotante limpia) está copiada en assets,
   reservada para el futuro estado de "VIEW PRODUCT DETAILS".
 
+## Optimización
+
+- Fotos servidas como JPEG q82 (de ~6.7 MB en PNG a ~0.6 MB); solo `title.png`
+  queda en PNG (necesita alfa). Logo real en `assets/adidas.jpg` (JPG blanco)
+  fundido con `mix-blend-mode: multiply` sobre fondo papel del contenedor.
+- Los videos de estado (scroll/detail, ~14 MB) se descargan DESPUÉS del reveal
+  del hero (evento `f50:revealed`) para no competir con `hero.mp4`.
+- `user-select: none` global y `-webkit-user-drag: none` + `draggable=false`
+  en todas las imágenes: nada se arrastra ni se selecciona.
+- El rosa global `--pink` es ahora `#fd3572`, muestreado del wordmark; la
+  sangría izquierda del título usa el gradiente exacto del borde del PNG
+  (`#fc296e → #fd3172`, top 2.3%, alto 89.5%) — sin seam de dos colores.
+
 ## Assets
 
 Originales en `~/Documents/Websites Prototipes/F50 Sneakers/` (el server no puede
